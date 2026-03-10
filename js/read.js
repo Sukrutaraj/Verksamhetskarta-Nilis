@@ -110,7 +110,18 @@ async function readArabic(){
 
     let text = getReadableText();
 
-    let translated = await translateText(text,"ar");
+    let translated;
+
+    try{
+        translated = await translateText(text,"ar");
+    }
+    catch{
+        translated = text;
+    }
+
+    if(!translated || translated.length < 5){
+        translated = text;
+    }
 
     let speech = new SpeechSynthesisUtterance(translated);
 
@@ -173,6 +184,7 @@ document.addEventListener("DOMContentLoaded",function(){
     }
 
 });
+
 
 
 
