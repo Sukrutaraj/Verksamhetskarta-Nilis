@@ -114,14 +114,14 @@ async function readArabic(){
 
     let speech = new SpeechSynthesisUtterance(translated);
 
-    speech.lang = "ar";
-
+    speech.lang = "ar-SA";
     speech.rate = 1;
 
     speech.onend = function(){
         isReading = false;
     };
 
+    speechSynthesis.cancel();
     speechSynthesis.speak(speech);
 
     isReading = true;
@@ -173,5 +173,6 @@ document.addEventListener("DOMContentLoaded",function(){
     }
 
 });
+
 
 
