@@ -1,8 +1,6 @@
 let isReading = false;
 let currentSpeech = null;
-
-let arabicAudio = null;
-let arabicPlaying = false;
+let audioPlayer = null;
 
 
 /* =========================
@@ -18,6 +16,128 @@ function getReadableText(){
     if(!content) return "";
 
     return content.innerText;
+
+}
+
+
+/* =========================
+   STOPPA ALLT
+   ========================= */
+
+function stopReading(){
+
+    window.speechSynthesis.cancel();
+
+    if(audioPlayer){
+        audioPlayer.pause();
+        audioPlayer = null;
+    }
+
+    isReading = false;
+}
+
+
+/* =========================
+   SVENSKA
+   ========================= */
+
+function toggleRead(){
+
+    if(isReading){
+        stopReading();
+        return;
+    }
+
+    let text = getReadableText();
+
+    let speech = new SpeechSynthesisUtterance(text);
+
+    speech.lang = "sv-SE";
+    speech.rate = 1;
+
+    speech.onend = function(){
+        isReading = false;
+    };
+
+    speechSynthesis.speak(speech);
+
+    isReading = true;
+
+}
+
+
+/* =========================
+   SOMALISKA
+   ========================= */
+
+async function readSomali(){
+
+    if(isReading){
+        stopReading();
+        return;
+    }
+
+    let text = getReadableText();
+
+    let translated = await translateText(text,"so");
+
+    let speech = new SpeechSynthesisUtterance(translated);
+
+    speech.lang = "so-SO";
+    speech.rate = 1;
+
+    speech.onend = function(){
+        isReading = false;
+    };
+
+    speechSynthesis.speak(speech);
+
+    isReading = true;
+
+}
+
+
+/* =========================
+   ARABISKA (Google TTS)
+   ========================= */
+
+async function readArabic(){
+
+    stopReading();
+
+    let text = getReadableText();
+
+    let translated = await translateText(text,"ar");
+
+    let chunks = translated.match(/.{1,180}/g);
+
+    if(!chunks) return;
+
+    let i = 0;
+
+    function playNext(){
+
+        if(i >= chunks.length){
+            isReading = false;
+            return;
+        }
+
+        let url =
+        "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ar&q=" +
+        encodeURIComponent(chunks[i]);
+
+        audioPlayer = new Audio(url);
+
+        audioPlayer.onended = function(){
+            i++;
+            playNext();
+        };
+
+        audioPlayer.play();
+
+    }
+
+    playNext();
 
 }
 
@@ -54,151 +174,6 @@ async function translateText(text,target){
 
 
 /* =========================
-   STARTA UPPLÄSNING
-   ========================= */
-
-function startReading(text,lang){
-
-    window.speechSynthesis.cancel();
-
-    currentSpeech = new SpeechSynthesisUtterance(text);
-    currentSpeech.lang = lang;
-    currentSpeech.rate = 1;
-
-    currentSpeech.onend = function(){
-
-        isReading=false;
-        updateButtons();
-
-    };
-
-    speechSynthesis.speak(currentSpeech);
-
-    isReading=true;
-
-    updateButtons();
-
-}
-
-
-/* =========================
-   STOPPA
-   ========================= */
-
-function stopReading(){
-
-    speechSynthesis.cancel();
-
-    if(arabicAudio){
-        arabicAudio.pause();
-        arabicAudio=null;
-    }
-
-    arabicPlaying=false;
-    isReading=false;
-
-    updateButtons();
-
-}
-
-
-/* =========================
-   SVENSKA
-   ========================= */
-
-function toggleRead(){
-
-    if(isReading){
-        stopReading();
-        return;
-    }
-
-    let text = getReadableText();
-
-    startReading(text,"sv-SE");
-
-}
-
-
-/* =========================
-   ARABISKA
-   ========================= */
-
-function readArabic(){
-
-    stopReading(); // stoppa allt annat först
-
-    let text = getReadableText();
-    if(!text) return;
-
-    const speech = new SpeechSynthesisUtterance(text);
-
-    // försök hitta arabisk röst
-    const voices = speechSynthesis.getVoices();
-    const arabicVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith("ar"));
-
-    if(arabicVoice){
-        speech.voice = arabicVoice;
-        speech.lang = arabicVoice.lang;
-    } else {
-        speech.lang = "ar";
-    }
-
-    speech.rate = 1;
-
-    speech.onend = function(){
-        isReading = false;
-        updateButtons();
-    };
-
-    speechSynthesis.speak(speech);
-    isReading = true;
-    updateButtons();
-}
-
-
-/* =========================
-   SOMALISKA
-   ========================= */
-
-async function readSomali(){
-
-    if(isReading){
-        stopReading();
-        return;
-    }
-
-    let text = getReadableText();
-
-    let translated = await translateText(text,"so");
-
-    startReading(translated,"so-SO");
-
-}
-
-
-/* =========================
-   UPPDATERA KNAPPAR
-   ========================= */
-
-function updateButtons(){
-
-    const buttons = document.querySelectorAll(".stop-button");
-
-    buttons.forEach(button=>{
-
-        if(isReading){
-            button.innerText="⏹ Stoppa";
-        }else{
-            button.innerText="🔊 Svenska";
-        }
-
-    });
-
-}
-
-
-/* =========================
    STÖD FÖR GAMLA KNAPPAR
    ========================= */
 
@@ -207,9 +182,7 @@ document.addEventListener("DOMContentLoaded",function(){
     const oldButton = document.getElementById("readBtn");
 
     if(oldButton){
-
         oldButton.addEventListener("click",toggleRead);
-
     }
 
 });
