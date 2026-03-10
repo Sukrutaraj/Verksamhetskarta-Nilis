@@ -105,20 +105,22 @@ function readArabic(){
 
     stopReading();
 
-    let text = getReadableText();
-
+    const text = getReadableText();
     if(!text) return;
 
-    let url =
+    const url =
     "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ar&q=" +
     encodeURIComponent(text);
 
-    let audio = new Audio(url);
+    const audio = new Audio();
+    audio.src = url;
+    audio.crossOrigin = "anonymous";
 
-    audio.play();
+    audio.play().catch(err => {
+        console.log("Audio play blocked:", err);
+    });
 
 }
-
 
 /* =========================
    GOOGLE ÖVERSÄTTNING
@@ -164,6 +166,7 @@ document.addEventListener("DOMContentLoaded",function(){
     }
 
 });
+
 
 
 
