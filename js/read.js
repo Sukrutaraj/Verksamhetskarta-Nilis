@@ -1,78 +1,215 @@
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-<meta charset="UTF-8">
-<title>Nilis – Verksamhetskarta</title>
-<link rel="stylesheet" href="css/style.css">
-</head>
+let isReading = false;
+let currentSpeech = null;
 
-<body class="map-page">
+let arabicAudio = null;
+let arabicPlaying = false;
 
-<!-- Tillbaka -->
-<div class="back-link">
-<a href="nilis.html">← Tillbaka till Nilis</a>
-</div>
 
-<!-- Byt vy -->
-<div class="toggle-view">
-<a href="index-vand.html">Byt vy</a>
-</div>
+/* =========================
+   HÄMTA TEXT
+   ========================= */
 
-<!-- Uppläsningsknappar -->
-<div class="read-top">
+function getReadableText(){
 
-<button class="read-button" onclick="toggleRead()">
-🔊 Svenska
-</button>
+    let content =
+        document.querySelector('.readable-content') ||
+        document.querySelector('.readable-content-wrapper');
 
-<button class="read-button" onclick="readArabic()">🔊 العربية</button>
+    if(!content) return "";
 
-<button class="read-button" onclick="readSomali()">
-🔊 Soomaali
-</button>
+    return content.innerText;
 
-</div>
+}
 
-<!-- Text som kan läsas upp -->
-<div class="readable-content-wrapper" style="display:none;">
 
-Nilis daglig verksamhet.
-Här kan du utforska verksamheten genom att klicka på olika grupper
-i kartan. Välj en grupp för att läsa mer om hur de arbetar,
-vilken teknik som används och vilka aktiviteter som finns.
+/* =========================
+   GOOGLE ÖVERSÄTTNING
+   ========================= */
 
-</div>
+async function translateText(text,target){
 
-<!-- KARTA -->
-<div class="map-wrapper">
+    try{
 
-<img src="images/nilis.png"
-     class="map-image"
-     alt="Nilis karta">
+        const url =
+        "https://translate.googleapis.com/translate_a/single?client=gtx&sl=sv&tl=" +
+        target +
+        "&dt=t&q=" +
+        encodeURIComponent(text);
 
-<!-- Fönster Hotspot -->
-<a href="groups/fonster.html"
-   class="hotspot fonster"
-   aria-label="Fönstergruppen"></a>
+        const response = await fetch(url);
 
-<!-- Fönster Hover -->
-<img src="images/hover-fonster.png"
-     class="map-image hover-image hover-fonster"
-     alt="">
+        const data = await response.json();
 
-<!-- Örn Hotspot -->
-<a href="groups/orngrupp.html"
-   class="hotspot orn"
-   aria-label="Örngruppen"></a>
+        return data[0].map(x=>x[0]).join("");
 
-<!-- Örn Hover -->
-<img src="images/hover-orn.png"
-     class="map-image hover-image hover-orn"
-     alt="">
+    }catch(e){
 
-</div>
+        console.warn("Översättning misslyckades",e);
 
-<script src="js/read.js"></script>
+        return text;
 
-</body>
-</html>
+    }
+
+}
+
+
+/* =========================
+   STARTA UPPLÄSNING
+   ========================= */
+
+function startReading(text,lang){
+
+    window.speechSynthesis.cancel();
+
+    currentSpeech = new SpeechSynthesisUtterance(text);
+    currentSpeech.lang = lang;
+    currentSpeech.rate = 1;
+
+    currentSpeech.onend = function(){
+
+        isReading=false;
+        updateButtons();
+
+    };
+
+    speechSynthesis.speak(currentSpeech);
+
+    isReading=true;
+
+    updateButtons();
+
+}
+
+
+/* =========================
+   STOPPA
+   ========================= */
+
+function stopReading(){
+
+    speechSynthesis.cancel();
+
+    if(arabicAudio){
+        arabicAudio.pause();
+        arabicAudio=null;
+    }
+
+    arabicPlaying=false;
+    isReading=false;
+
+    updateButtons();
+
+}
+
+
+/* =========================
+   SVENSKA
+   ========================= */
+
+function toggleRead(){
+
+    if(isReading){
+        stopReading();
+        return;
+    }
+
+    let text = getReadableText();
+
+    startReading(text,"sv-SE");
+
+}
+
+
+/* =========================
+   ARABISKA
+   ========================= */
+
+function readArabic(){
+
+    stopReading(); // stoppa allt annat först
+
+    let text = getReadableText();
+    if(!text) return;
+
+    const speech = new SpeechSynthesisUtterance(text);
+
+    // försök hitta arabisk röst
+    const voices = speechSynthesis.getVoices();
+    const arabicVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith("ar"));
+
+    if(arabicVoice){
+        speech.voice = arabicVoice;
+        speech.lang = arabicVoice.lang;
+    } else {
+        speech.lang = "ar";
+    }
+
+    speech.rate = 1;
+
+    speech.onend = function(){
+        isReading = false;
+        updateButtons();
+    };
+
+    speechSynthesis.speak(speech);
+    isReading = true;
+    updateButtons();
+}
+
+
+/* =========================
+   SOMALISKA
+   ========================= */
+
+async function readSomali(){
+
+    if(isReading){
+        stopReading();
+        return;
+    }
+
+    let text = getReadableText();
+
+    let translated = await translateText(text,"so");
+
+    startReading(translated,"so-SO");
+
+}
+
+
+/* =========================
+   UPPDATERA KNAPPAR
+   ========================= */
+
+function updateButtons(){
+
+    const buttons = document.querySelectorAll(".stop-button");
+
+    buttons.forEach(button=>{
+
+        if(isReading){
+            button.innerText="⏹ Stoppa";
+        }else{
+            button.innerText="🔊 Svenska";
+        }
+
+    });
+
+}
+
+
+/* =========================
+   STÖD FÖR GAMLA KNAPPAR
+   ========================= */
+
+document.addEventListener("DOMContentLoaded",function(){
+
+    const oldButton = document.getElementById("readBtn");
+
+    if(oldButton){
+
+        oldButton.addEventListener("click",toggleRead);
+
+    }
+
+});
