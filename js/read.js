@@ -101,14 +101,18 @@ async function readSomali(){
    ARABISKA (Google TTS)
    ========================= */
 
-function readArabic(){
+async function readArabic(){
 
-    stopReading();
+    if(isReading){
+        stopReading();
+        return;
+    }
 
     let text = getReadableText();
-    if(!text) return;
 
-    let speech = new SpeechSynthesisUtterance(text);
+    let translated = await translateText(text,"ar");
+
+    let speech = new SpeechSynthesisUtterance(translated);
 
     speech.lang = "ar";
 
@@ -121,6 +125,7 @@ function readArabic(){
     speechSynthesis.speak(speech);
 
     isReading = true;
+
 }
 
 
@@ -168,4 +173,5 @@ document.addEventListener("DOMContentLoaded",function(){
     }
 
 });
+
 
