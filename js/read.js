@@ -101,41 +101,21 @@ async function readSomali(){
    ARABISKA (Google TTS)
    ========================= */
 
-async function readArabic(){
+function readArabic(){
 
-    if(isReading){
-        stopReading();
-        return;
-    }
+    stopReading();
 
     let text = getReadableText();
 
-    let translated;
+    if(!text) return;
 
-    try{
-        translated = await translateText(text,"ar");
-    }
-    catch{
-        translated = text;
-    }
+    let url =
+    "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=ar&q=" +
+    encodeURIComponent(text);
 
-    if(!translated || translated.length < 5){
-        translated = text;
-    }
+    let audio = new Audio(url);
 
-    let speech = new SpeechSynthesisUtterance(translated);
-
-    speech.lang = "ar-SA";
-    speech.rate = 1;
-
-    speech.onend = function(){
-        isReading = false;
-    };
-
-    speechSynthesis.cancel();
-    speechSynthesis.speak(speech);
-
-    isReading = true;
+    audio.play();
 
 }
 
@@ -184,6 +164,7 @@ document.addEventListener("DOMContentLoaded",function(){
     }
 
 });
+
 
 
 
