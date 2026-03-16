@@ -36,74 +36,52 @@ color:#333;
 .start-grid{
 display:flex;
 gap:60px;
+flex-wrap:wrap;
+justify-content:center;
 }
 
 .start-card{
-
 width:260px;
 height:260px;
-
 border-radius:20px;
-
 overflow:hidden;
-
 display:flex;
 flex-direction:column;
 justify-content:flex-end;
-
 text-decoration:none;
 color:white;
-
 font-weight:bold;
-
 background-size:cover;
 background-position:center;
-
 transition:all 0.25s ease;
-
 box-shadow:0 4px 12px rgba(0,0,0,0.15);
-
 }
 
 .start-card span{
-
 background:rgba(0,0,0,0.55);
-
 padding:15px;
-
 text-align:center;
-
 font-size:20px;
-
 }
 
 .start-card:hover{
-
 transform:scale(1.06);
-
 box-shadow:0 14px 35px rgba(0,0,0,0.25);
-
 }
 
 /* diskret pil längst ner */
-
 .start-hint{
-
 position:absolute;
 bottom:30px;
 font-size:28px;
 opacity:0.6;
-
 animation:hintMove 2s infinite;
-
 }
 
 @keyframes hintMove{
-
 0% {transform:translateY(0)}
 50% {transform:translateY(8px)}
 100% {transform:translateY(0)}
-
 }
 
 </style>
@@ -128,25 +106,19 @@ grupper och teknik hänger ihop och hur arbetet är organiserat.
 <a href="index.html"
 class="start-card"
 style="background-image:url('images/nilis.png')">
-
 <span>Huvudlokal</span>
-
 </a>
 
 <a href="transport/transport.html"
 class="start-card"
 style="background-image:url('images/transport.png')">
-
 <span>Transport</span>
-
 </a>
 
-<a href="#"
+<a href="skrylle/index.html"
 class="start-card"
-style="background-image:url('images/skrylle.png')">
-
+style="background-image:url('skrylle/skrylle.png')">
 <span>Skryllegården</span>
-
 </a>
 
 </div>
@@ -156,7 +128,6 @@ style="background-image:url('images/skrylle.png')">
 <div class="start-hint">↓</div>
 
 <script src="js/read.js"></script>
-  
-</body>
 
+</body>
 </html>
