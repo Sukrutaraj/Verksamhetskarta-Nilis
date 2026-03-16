@@ -79,8 +79,8 @@ html, body {
    ========================= */
 
 .orn {
-    top: 15%;   /* justera vid behov */
-    left: 55%;  /* justera vid behov */
+    top: 15%;
+    left: 55%;
     width: 15%;
     height: 30%;
 }
@@ -94,13 +94,58 @@ html, body {
    ========================= */
 
 .vand-orn {
-    top: 50%;   /* justera vid behov */
-    left: 40%;  /* justera vid behov */
+    top: 50%;
+    left: 40%;
     width: 23%;
     height: 43%;
 }
 
 .vand-orn:hover ~ .hover-vand-orn {
+    opacity: 1;
+}
+
+/* =========================
+   SKRYLLE – NILIS STARTSIDA
+   ========================= */
+
+.skrylle {
+    top: 20%;   /* justera vid behov */
+    left: 20%;  /* justera vid behov */
+    width: 20%;
+    height: 30%;
+}
+
+.skrylle:hover ~ .hover-skrylle {
+    opacity: 1;
+}
+
+/* =========================
+   SKRYLLE – EGEN KARTA NORMAL VY
+   ========================= */
+
+.skrylle-grupprum {
+    top: 51%;   /* justera vid behov */
+    left: 83%;  /* justera vid behov */
+    width: 10%;
+    height: 15%;
+}
+
+.skrylle-grupprum:hover ~ .hover-skrylle-main {
+    opacity: 1;
+}
+
+/* =========================
+   SKRYLLE – EGEN KARTA VÄND VY
+   ========================= */
+
+.vand-skrylle-grupprum {
+    top: 40%;   /* justera vid behov */
+    left: 5%;  /* justera vid behov */
+    width: 10%;
+    height: 15%;
+}
+
+.vand-skrylle-grupprum:hover ~ .hover-skrylle-vand {
     opacity: 1;
 }
 
@@ -155,6 +200,10 @@ body {
     position: absolute;
     top: 20px;
     right: 30px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
 .read-button {
@@ -215,6 +264,7 @@ h1 {
     justify-content: center;
     gap: 20px;
     margin: 40px 0 60px 0;
+    flex-wrap: wrap;
 }
 
 .action-button {
@@ -284,6 +334,13 @@ h1 {
     line-height: 1.6;
 }
 
+.tech-description ul {
+    display: inline-block;
+    text-align: left;
+    margin: 0 auto;
+    padding-left: 20px;
+}
+
 /* =========================
    GEMENSAM TEKNIKLAYOUT
    ========================= */
@@ -315,6 +372,12 @@ h1 {
 .intro-text {
     font-size: 1.05rem;
     line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    text-align: center;
+    margin-top: 40px;
     margin-bottom: 20px;
 }
 
@@ -356,15 +419,3 @@ body.content-page {
     line-height: 1.6;
 }
 
-.tech-description ul {
-    display: inline-block;
-    text-align: left;
-    margin: 0 auto;
-    padding-left: 20px;
-}
-
-.section-title {
-    text-align: center;
-    margin-top: 40px;
-    margin-bottom: 20px;
-}
