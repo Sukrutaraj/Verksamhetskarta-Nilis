@@ -2,59 +2,43 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<title>Skryllegruppen – Nilis</title>
+<title>Skryllegruppen – Karta</title>
 <link rel="stylesheet" href="../css/style.css">
 </head>
 
-<body>
+<body class="map-page">
 
-<!-- Tillbaka -->
 <div class="back-link">
 <a href="../index.html">← Tillbaka till Nilis</a>
 </div>
 
-<!-- Läs upp -->
+<div class="toggle-view">
+<a href="index-vand.html">Byt vy</a>
+</div>
+
 <div class="read-top">
 <button class="read-button" onclick="toggleRead()">🔊 Svenska</button>
 <button class="read-button" onclick="readArabic()">🔊 العربية</button>
 <button class="read-button" onclick="readSomali()">🔊 Soomaali</button>
 </div>
 
-<!-- ALL TEXT -->
-<div class="readable-content-wrapper">
-
-<h1>SKRYLLE: Skryllegruppen</h1>
-
-<p class="specialization">
-Strukturerat och verklighetsnära arbete som skapar självständighet,
-ansvar och arbetslivsförberedelse genom tydliga uppgifter och tekniskt stöd.
-</p>
-
-<div class="room-image">
-<img src="skrylle-grupprum.png" alt="Skryllegruppen">
+<div class="readable-content-wrapper" style="display:none;">
+Skryllegruppen. Klicka på grupprummet för att utforska verksamheten.
 </div>
 
-<section class="content-section">
+<div class="map-wrapper">
 
-<h2>Om gruppen</h2>
+<img src="skrylle.png"
+     class="map-image"
+     alt="Skrylle karta">
 
-<p>
-Skryllegruppen präglas av gemenskap, samarbete och glädje.
-Tempot varierar beroende på verksamhetens behov, veckodag och säsong.
-</p>
+<a href="grupprum.html"
+   class="hotspot skrylle-grupprum"
+   aria-label="Grupprum"></a>
 
-<p>
-Arbetet sker i en verklig verksamhetsmiljö på Skryllegården,
-vilket skapar motivation och stolthet hos deltagarna.
-</p>
-
-</section>
-
-<div class="button-row">
-<a href="skrylle-teknik.html" class="action-button">Teknik i rummet</a>
-<a href="skrylle-mer.html" class="action-button">Mer om gruppen</a>
-<a href="skrylle-kompetens.html" class="action-button">Special kompetens</a>
-</div>
+<img src="hover-skrylle.png"
+     class="map-image hover-image hover-skrylle-main"
+     alt="">
 
 </div>
 
