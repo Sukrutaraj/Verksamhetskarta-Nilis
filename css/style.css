@@ -138,11 +138,11 @@ body.map-page {
 .vand-fonster:hover ~ .hover-vand-fonster { opacity: 1; }
 
 /* ÖRNGRUPPEN – Normal vy */
-.orn      { top: 20%; left: 20%; width: 18%; height: 30%; }
+.orn      { top: 10%; left: 58%; width: 22%; height: 28%; }
 .orn:hover ~ .hover-orn { opacity: 1; }
 
 /* ÖRNGRUPPEN – Vänd vy */
-.vand-orn { top: 20%; left: 62%; width: 18%; height: 30%; }
+.vand-orn { top: 38%; left: 38%; width: 22%; height: 32%; }
 .vand-orn:hover ~ .hover-vand-orn { opacity: 1; }
 
 /* ── Vy-växlare / toggle ────────────────────── */
