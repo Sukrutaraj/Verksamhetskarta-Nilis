@@ -441,3 +441,33 @@ h1 { margin-top: 10px; margin-bottom: 20px; }
 }
 
 .show-structure .structure-overlay { opacity: 1; }
+
+/* ── Skrylle hotspots ───────────────────────── */
+
+.skrylle-grupprum {
+    position: absolute;
+    top: 51%;
+    left: 83%;
+    width: 10%;
+    height: 15%;
+    cursor: pointer;
+}
+
+.skrylle-grupprum:hover ~ .hover-skrylle-main { opacity: 1; }
+
+.vand-skrylle-grupprum {
+    position: absolute;
+    top: 40%;
+    left: 5%;
+    width: 10%;
+    height: 15%;
+    cursor: pointer;
+}
+
+.vand-skrylle-grupprum:hover ~ .hover-skrylle-vand { opacity: 1; }
+
+/* ── Fix: structure-overlay blockerar inte klick ── */
+
+.structure-overlay {
+    pointer-events: none !important;
+}
