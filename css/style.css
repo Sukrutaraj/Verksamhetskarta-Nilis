@@ -424,3 +424,20 @@ h1 { margin-top: 10px; margin-bottom: 20px; }
 
     .tech-description { font-size: 15px; }
 }
+
+/* ── Visa grupper / map-view toggle ─────────── */
+
+.map-view         { display: none; }
+.map-view.active-view { display: block; }
+
+.structure-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.show-structure .structure-overlay { opacity: 1; }
