@@ -1,64 +1,75 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Skryllegruppen – Karta</title>
-<link rel="stylesheet" href="../css/style.css">
-<script src="https://code.responsivevoice.org/responsivevoice.js?key=T0bKfJIE"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skryllegruppen – Karta</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=T0bKfJIE"></script>
 </head>
 
 <body class="map-page">
 
 <div class="back-link">
-<a href="../index.html">← Tillbaka till Nilis</a>
+    <a href="../index.html">← Tillbaka till Nilis</a>
 </div>
 
-<div class="toggle-view">
-<a href="index-vand.html">Byt vy</a>
-</div>
-
-<div class="read-top">
-
-<button class="read-button stop-button" onclick="toggleRead()">
-🔊 Svenska
-</button>
-
-<button class="read-button read-btn-en" onclick="readEnglish()">
-🔊 English
-</button>
-
-<button class="read-button read-btn-ar" onclick="readArabic()">
-🔊 العربية
-</button>
-
-<button class="read-button read-btn-so" onclick="readSomali()">
-🔊 Somali
-</button>
-
+<div class="view-toggle">
+    <button id="toggleStructure">Visa grupper</button>
+    <button id="toggleView">Vänd vy</button>
 </div>
 
 <div class="readable-content-wrapper" style="display:none;">
 Skryllegruppen. Klicka på grupprummet för att utforska verksamheten.
 </div>
 
-<div class="map-wrapper">
+<!-- NORMAL VY -->
+<div id="normalView" class="map-view active-view">
+    <div class="map" style="position:relative;">
 
-<img src="skrylle.png"
-     class="map-image"
-     alt="Skrylle karta">
+        <img src="skrylle.png"
+             class="map-image"
+             alt="Skrylle karta">
 
-<a href="grupprum.html"
-   class="hotspot skrylle-grupprum"
-   aria-label="Grupprum"></a>
+        <img src="hover-skrylle.png"
+             class="map-image hover-image structure-overlay"
+             alt="">
 
-<img src="hover-skrylle.png"
-     class="map-image hover-image hover-skrylle-main"
-     alt="">
+        <a href="grupprum.html"
+           class="hotspot skrylle-grupprum"
+           aria-label="Grupprum"></a>
 
+        <img src="hover-skrylle.png"
+             class="map-image hover-image hover-skrylle-main"
+             alt="">
+
+    </div>
 </div>
 
+<!-- VÄND VY -->
+<div id="vandView" class="map-view">
+    <div class="map" style="position:relative;">
+
+        <img src="skrylle-vand.png"
+             class="map-image"
+             alt="Skrylle vänd">
+
+        <img src="hover-skrylle-vand.png"
+             class="map-image hover-image structure-overlay"
+             alt="">
+
+        <a href="grupprum.html"
+           class="hotspot vand-skrylle-grupprum"
+           aria-label="Grupprum"></a>
+
+        <img src="hover-skrylle-vand.png"
+             class="map-image hover-image hover-skrylle-vand"
+             alt="">
+
+    </div>
+</div>
+
+<script src="../js/map-controls.js"></script>
 <script src="../js/read.js"></script>
 
 </body>
