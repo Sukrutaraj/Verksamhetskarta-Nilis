@@ -2,8 +2,11 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>iPad – Skryllegruppen</title>
 <link rel="stylesheet" href="../css/style.css">
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=T0bKfJIE"></script>
 </head>
 
 <body>
@@ -13,9 +16,23 @@
 </div>
 
 <div class="read-top">
-<button class="read-button" onclick="toggleRead()">🔊 Svenska</button>
-<button class="read-button" onclick="readArabic()">🔊 العربية</button>
-<button class="read-button" onclick="readSomali()">🔊 Soomaali</button>
+
+<button class="read-button stop-button" onclick="toggleRead()">
+🔊 Svenska
+</button>
+
+<button class="read-button read-btn-en" onclick="readEnglish()">
+🔊 English
+</button>
+
+<button class="read-button read-btn-ar" onclick="readArabic()">
+🔊 العربية
+</button>
+
+<button class="read-button read-btn-so" onclick="readSomali()">
+🔊 Somali
+</button>
+
 </div>
 
 <h1 class="page-title">IPAD</h1>
@@ -62,9 +79,7 @@ Introducera uppgiften tydligt och koppla den till det praktiska arbetet.
 Arbeta i korta moment med tydlig start och avslut.
 </p>
 
-<div class="button-row">
-<a href="#" class="action-button">Öppna checklista</a>
-</div>
+
 
 </div>
 
