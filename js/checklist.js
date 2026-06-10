@@ -1,6 +1,6 @@
 /* ============================================================
-   checklist.js  –  Diabasen-Verksamhetskarta
-   Checklista-bibliotek via GitHub API
+   checklist.js v2  –  Diabasen-Verksamhetskarta
+   Läser page-id automatiskt från URL
    ============================================================ */
 
 (function () {
@@ -9,9 +9,15 @@
   const FOLDER = 'checklists';
   const BASE   = 'https://raw.githubusercontent.com/' + REPO + '/' + BRANCH + '/';
   const API    = 'https://api.github.com/repos/' + REPO + '/contents/';
-
   const TOKEN_ENC = '330d1b310b5c0772544317515c1f2127065001710013333a5a3363037702605532085a5f005a5b6e';
   const PWD_HASH  = '79b497e2';
+
+  // Läs page-id från URL automatiskt, t.ex. "grupp1-3d" från "/tech/grupp1-3d.html"
+  function getPageId() {
+    const path = window.location.pathname;
+    const filename = path.split('/').pop().replace('.html', '');
+    return filename || 'unknown';
+  }
 
   function checkPwd(pwd) {
     let h = 0;
@@ -39,13 +45,7 @@
     return r.json();
   }
 
-  async function ghPut(path, content, sha, message, token) {
-    const body = {
-      message,
-      content: btoa(unescape(encodeURIComponent(content))),
-      branch: BRANCH
-    };
-    if (sha) body.sha = sha;
+  async function ghPut(path, content, message, token) {
     const r = await fetch(API + path, {
       method: 'PUT',
       headers: {
@@ -53,12 +53,13 @@
         'Content-Type': 'application/json',
         'Accept': 'application/vnd.github.v3+json'
       },
-      body: JSON.stringify(body)
+      body: JSON.stringify({
+        message,
+        content: btoa(unescape(encodeURIComponent(content))),
+        branch: BRANCH
+      })
     });
-    if (!r.ok) {
-      const err = await r.json().catch(() => ({}));
-      throw new Error(err.message || r.status);
-    }
+    if (!r.ok) { const e = await r.json().catch(() => ({})); throw new Error(e.message || r.status); }
     return r.json();
   }
 
@@ -75,7 +76,7 @@
     if (!r.ok) throw new Error('Borttagning: ' + r.status);
   }
 
-  async function fetchChecklists() {
+  async function fetchChecklists(pageId) {
     try {
       const files = await ghGet(FOLDER);
       const metaFiles = files.filter(f => f.name.startsWith('meta_') && f.name.endsWith('.json'));
@@ -85,20 +86,29 @@
           const r = await fetch(BASE + FOLDER + '/' + mf.name);
           if (!r.ok) continue;
           const meta = await r.json();
-          items.push({ ...meta, _file: mf.name, _sha: mf.sha });
-        } catch (e) {}
+          // Visa om page matchar, eller om page saknas (bakåtkompatibilitet)
+          if (meta.page === pageId || !meta.page) {
+            items.push({ ...meta, _file: mf.name, _sha: mf.sha });
+          }
+        } catch(e) {}
       }
       return items;
-    } catch (e) {
-      return [];
-    }
+    } catch(e) { return []; }
   }
 
-  async function saveChecklist(title, url, addedBy, token) {
+  async function saveChecklist(title, url, addedBy, pageId, token) {
     const id   = Date.now();
-    const meta = { id, title, url, addedBy, date: new Date().toISOString() };
-    const filename = FOLDER + '/meta_' + id + '.json';
-    await ghPut(filename, JSON.stringify(meta, null, 2), null, 'Lägg till checklista: ' + title, token);
+    const meta = {
+      id, title, url, addedBy,
+      date: new Date().toISOString(),
+      page: pageId   // <-- alltid sparat nu
+    };
+    await ghPut(
+      FOLDER + '/meta_' + id + '.json',
+      JSON.stringify(meta, null, 2),
+      'Lägg till checklista: ' + title,
+      token
+    );
     return meta;
   }
 
@@ -113,19 +123,19 @@
   }
 
   function renderWidget(container) {
+    const pageId = getPageId();
+
     container.innerHTML = `
       <div class="cl-box">
         <h2 class="cl-heading"><span class="cl-icon">📋</span> Checklistor</h2>
-        <div class="cl-list" id="cl-list-${container.dataset.id}">
-          <div class="cl-loading">Laddar checklistor…</div>
-        </div>
+        <div class="cl-list"></div>
         <details class="cl-add-section">
           <summary class="cl-add-toggle">+ Lägg till checklista</summary>
           <div class="cl-add-form">
             <label class="cl-label">Lösenord</label>
             <input type="password" class="cl-input cl-pwd" placeholder="Ange lösenord" />
             <label class="cl-label">Titel</label>
-            <input type="text" class="cl-input cl-title" placeholder="T.ex. Morgonrutin" />
+            <input type="text" class="cl-input cl-title" placeholder="T.ex. Starta maskinen" />
             <label class="cl-label">Länk till checklistan</label>
             <input type="url" class="cl-input cl-url" placeholder="https://sukrutaraj.github.io/digital-checklist-maker/…" />
             <label class="cl-label">Ditt namn</label>
@@ -153,13 +163,13 @@
 
     async function loadList() {
       listEl.innerHTML = '<div class="cl-loading">Laddar…</div>';
-      const items = await fetchChecklists();
+      const items = await fetchChecklists(pageId);
       if (items.length === 0) {
         listEl.innerHTML = '<div class="cl-empty">Inga checklistor tillagda ännu.</div>';
         return;
       }
       listEl.innerHTML = '';
-      items.sort((a, b) => b.id - a.id);
+      items.sort((a, b) => a.id - b.id); // äldst först = logisk ordning
       items.forEach(item => {
         const div = document.createElement('div');
         div.className = 'cl-item';
@@ -180,7 +190,7 @@
           try {
             await deleteChecklist(item, token);
             loadList();
-          } catch (e) {
+          } catch(e) {
             alert('Fel: ' + e.message);
             div.style.opacity = '1';
           }
@@ -200,11 +210,11 @@
       savBtn.disabled = true;
       savBtn.textContent = 'Sparar…';
       try {
-        await saveChecklist(title, url, name || 'Okänd', token);
-        showMsg('✅ Checklistan är sparad!', true);
+        await saveChecklist(title, url, name || 'Okänd', pageId, token);
+        showMsg('✅ Sparad!', true);
         titleInput.value = urlInput.value = nameInput.value = '';
         loadList();
-      } catch (e) {
+      } catch(e) {
         showMsg('Fel: ' + e.message, false);
       } finally {
         savBtn.disabled = false;
