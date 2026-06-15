@@ -977,9 +977,17 @@ async function ghGetFileOv(path, token) {
 }
 
 async function ghPutOv(path, content, sha, message, token) {
-  const body = { message, content: btoa(unescape(encodeURIComponent(content))), branch: BRANCH };
+  // Encode to base64 safely
+  const bytes = new TextEncoder().encode(content);
+  let binary = '';
+  bytes.forEach(b => binary += String.fromCharCode(b));
+  const b64 = btoa(binary);
+
+  const body = { message, content: b64, branch: BRANCH };
   if (sha) body.sha = sha;
-  const r = await fetch(API + path, {
+
+  const url = API + path;
+  const r = await fetch(url, {
     method: 'PUT',
     headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
     body: JSON.stringify(body)
