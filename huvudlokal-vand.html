@@ -6,8 +6,8 @@
     <title>Nilis – Verksamhetskarta</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        body.show-structure .hover-vand-fonster,
-        body.show-structure .hover-vand-orn { opacity: 1 !important; }
+        .hover-alla { display: none; }
+        body.show-structure .hover-alla { display: block; }
     </style>
 </head>
 
@@ -21,7 +21,7 @@
     <a href="huvudlokal.html">Byt vy</a>
 </div>
 
-<div class="view-toggle" style="position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;gap:8px;">
+<div class="view-toggle" style="position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:1000;">
     <button id="toggleStructure" class="structure-btn" style="padding:8px 16px;background:rgba(0,80,160,0.85);color:#fff;border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:14px;">Visa grupper</button>
 </div>
 
@@ -31,46 +31,39 @@
          class="map-image base-image"
          alt="Nilis vänd">
 
-    <img src="images/hover-vand-fonster.png"
-         class="map-image hover-image hover-vand-fonster"
-         alt="">
-
-    <img src="images/hover-vand-orn.png"
-         class="map-image hover-image hover-vand-orn"
+    <img src="images/hover-vand-alla.png"
+         class="map-image hover-image hover-alla"
          alt="">
 
     <a href="groups/fonster.html"
        class="hotspot vand-fonster"
        aria-label="Fönstergruppen"></a>
 
+    <img src="images/hover-vand-fonster.png"
+         class="map-image hover-image hover-vand-fonster"
+         alt="">
+
     <a href="groups/orngrupp.html"
        class="hotspot vand-orn"
        aria-label="Örngruppen"></a>
 
+    <img src="images/hover-vand-orn.png"
+         class="map-image hover-image hover-vand-orn"
+         alt="">
+
 </div>
 
 <script src="js/read.js"></script>
-<script src="js/map-controls.js"></script>
-
-
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const btn = document.getElementById("toggleStructure");
     if (!btn) return;
     btn.addEventListener("click", function() {
-        const hoverImages = document.querySelectorAll('.hover-image');
-        const isShowing = btn.getAttribute('data-showing') === '1';
-        if (isShowing) {
-            hoverImages.forEach(img => img.style.opacity = '0');
-            btn.setAttribute('data-showing', '0');
-            btn.textContent = 'Visa grupper';
-        } else {
-            hoverImages.forEach(img => img.style.opacity = '1');
-            btn.setAttribute('data-showing', '1');
-            btn.textContent = 'Dölj grupper';
-        }
+        const isShowing = document.body.classList.toggle("show-structure");
+        btn.textContent = isShowing ? "Dölj grupper" : "Visa grupper";
     });
 });
 </script>
+
 </body>
 </html>
