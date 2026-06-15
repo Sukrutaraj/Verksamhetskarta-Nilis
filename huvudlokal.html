@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nilis – Verksamhetskarta</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Override: show both hover images when show-structure is active */
+        body.show-structure .hover-fonster,
+        body.show-structure .hover-orn { opacity: 1 !important; }
+    </style>
 </head>
 
 <body class="map-page">
@@ -30,9 +35,6 @@
 
 <div class="readable-content-wrapper" style="display:none;">
 Nilis daglig verksamhet.
-Här kan du utforska verksamheten genom att klicka på olika grupper
-i kartan. Välj en grupp för att läsa mer om hur de arbetar,
-vilken teknik som används och vilka aktiviteter som finns.
 </div>
 
 <div class="map-wrapper">
@@ -41,26 +43,21 @@ vilken teknik som används och vilka aktiviteter som finns.
          class="map-image base-image"
          alt="Nilis karta">
 
-    <img src="images/hela-hover-struktur.png"
-         class="map-image structure-overlay"
-         alt="Struktur"
-         onerror="this.style.display='none'">
+    <img src="images/hover-fonster.png"
+         class="map-image hover-image hover-fonster"
+         alt="">
+
+    <img src="images/hover-orn.png"
+         class="map-image hover-image hover-orn"
+         alt="">
 
     <a href="groups/fonster.html"
        class="hotspot fonster"
        aria-label="Fönstergruppen"></a>
 
-    <img src="images/hover-fonster.png"
-         class="map-image hover-image hover-fonster"
-         alt="">
-
     <a href="groups/orngrupp.html"
        class="hotspot orn"
        aria-label="Örngruppen"></a>
-
-    <img src="images/hover-orn.png"
-         class="map-image hover-image hover-orn"
-         alt="">
 
 </div>
 
