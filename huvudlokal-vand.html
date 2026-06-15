@@ -52,5 +52,25 @@
 <script src="js/read.js"></script>
 <script src="js/map-controls.js"></script>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const btn = document.getElementById("toggleStructure");
+    if (!btn) return;
+    btn.addEventListener("click", function() {
+        const hoverImages = document.querySelectorAll('.hover-image');
+        const isShowing = btn.getAttribute('data-showing') === '1';
+        if (isShowing) {
+            hoverImages.forEach(img => img.style.opacity = '0');
+            btn.setAttribute('data-showing', '0');
+            btn.textContent = 'Visa grupper';
+        } else {
+            hoverImages.forEach(img => img.style.opacity = '1');
+            btn.setAttribute('data-showing', '1');
+            btn.textContent = 'Dölj grupper';
+        }
+    });
+});
+</script>
 </body>
 </html>
