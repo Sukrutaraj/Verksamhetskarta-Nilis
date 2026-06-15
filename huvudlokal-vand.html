@@ -6,8 +6,8 @@
     <title>Nilis – Verksamhetskarta</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .hover-alla { display: none; }
-        body.show-structure .hover-alla { display: block; }
+        .hover-alla { opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+        body.show-structure .hover-alla { opacity: 1; }
     </style>
 </head>
 
