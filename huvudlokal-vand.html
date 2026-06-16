@@ -6,8 +6,16 @@
     <title>Nilis – Verksamhetskarta</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .hover-alla { opacity: 0; pointer-events: none; transition: opacity 0.2s; }
-        body.show-structure .hover-alla { opacity: 1 !important; }
+        .vand-fonster:hover ~ .hover-vand-fonster { opacity: 0; }
+        .vand-orn:hover ~ .hover-vand-orn { opacity: 0; }
+        .hover-alla {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: contain;
+            opacity: 0;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -32,35 +40,66 @@
          alt="Nilis vänd">
 
     <img src="images/hover-vand-alla.png"
-         class="map-image hover-image hover-alla"
-         alt="">
-
-    <a href="groups/fonster.html"
-       class="hotspot vand-fonster"
-       aria-label="Fönstergruppen"></a>
+         class="hover-alla"
+         alt="Alla grupper">
 
     <img src="images/hover-vand-fonster.png"
          class="map-image hover-image hover-vand-fonster"
          alt="">
 
-    <a href="groups/orngrupp.html"
-       class="hotspot vand-orn"
-       aria-label="Örngruppen"></a>
-
     <img src="images/hover-vand-orn.png"
          class="map-image hover-image hover-vand-orn"
          alt="">
+
+    <a href="groups/fonster.html"
+       class="hotspot vand-fonster"
+       id="hs-fonster"
+       aria-label="Fönstergruppen"></a>
+
+    <a href="groups/orngrupp.html"
+       class="hotspot vand-orn"
+       id="hs-orn"
+       aria-label="Örngruppen"></a>
 
 </div>
 
 <script src="js/read.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    const btn = document.getElementById("toggleStructure");
-    if (!btn) return;
-    btn.addEventListener("click", function() {
-        const isShowing = document.body.classList.toggle("show-structure");
-        btn.textContent = isShowing ? "Dölj grupper" : "Visa grupper";
+
+    var showingAll = false;
+    var hoverAlla        = document.querySelector('.hover-alla');
+    var hoverFonster     = document.querySelector('.hover-vand-fonster');
+    var hoverOrn         = document.querySelector('.hover-vand-orn');
+    var hsFonster        = document.getElementById('hs-fonster');
+    var hsOrn            = document.getElementById('hs-orn');
+    var btn              = document.getElementById('toggleStructure');
+
+    hsFonster.addEventListener('mouseenter', function() {
+        if (!showingAll) hoverFonster.style.opacity = '1';
+    });
+    hsFonster.addEventListener('mouseleave', function() {
+        hoverFonster.style.opacity = '0';
+    });
+
+    hsOrn.addEventListener('mouseenter', function() {
+        if (!showingAll) hoverOrn.style.opacity = '1';
+    });
+    hsOrn.addEventListener('mouseleave', function() {
+        hoverOrn.style.opacity = '0';
+    });
+
+    btn.addEventListener('click', function() {
+        showingAll = !showingAll;
+        if (showingAll) {
+            hoverAlla.style.opacity = '1';
+            hoverFonster.style.opacity = '0';
+            hoverOrn.style.opacity = '0';
+            btn.textContent = 'Dölj grupper';
+        } else {
+            hoverAlla.style.opacity = '0';
+            btn.textContent = 'Visa grupper';
+        }
     });
 });
 </script>
