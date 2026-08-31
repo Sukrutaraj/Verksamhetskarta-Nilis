@@ -1,0 +1,16 @@
+{
+  "id": 1788179474903,
+  "techName": "Speldatorer",
+  "emoji": "🖥️",
+  "groupId": "ovrigt",
+  "groupName": "Övrig teknik",
+  "file": "ovrigt-speldatorer",
+  "intro1": "Vad är det? \n\nEn digital steg-för-steg-checklista som hjälper användaren att komma igång med en speldator och själv kunna logga in, ansluta headset, öppna Steam, starta ett spel och avsluta på rätt sätt.",
+  "intro2": "Att använda en speldator kan innebära flera moment som behöver göras i rätt ordning. Genom att dela upp processen i tydliga steg får användaren ett visuellt stöd som gör det lättare att själv komma igång, spela och avsluta utan att behöva fråga om hjälp vid varje moment. \n\nChecklistan ger också möjlighet att öva på återkommande digitala färdigheter, exempelvis att logga in, använda headset, navigera i ett program och hantera ett spel.",
+  "usageItems": [
+    "- Spela spel på Steam",
+    "- Använda filmredigeringsprogram",
+    "- 3D modellerings program"
+  ],
+  "date": "2026-08-31T12:31:14.903Z"
+}
